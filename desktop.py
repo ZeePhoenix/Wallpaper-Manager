@@ -12,7 +12,7 @@ class times:
 # The Directiories for our images
 wallpapers = os.path.join(os.path.expanduser('~'), 'Pictures', 'Wallpapers')
 workDir = os.path.join(wallpapers, 'Motivational')
-playDir = os.path.join(wallpapers, 'Generic')
+genericDir = os.path.join(wallpapers, 'Generic')
 
 # Our 'Schedule' Dictionary of start and end times
 schedule = []
@@ -20,22 +20,26 @@ schedule.append(times(19,22))
 
 working = False
 
+changeDelay = 5
+
 while (True):
 	# Get our current time
 	currTime = time.localtime()
 
 	# Check if we should be working
 	for i in schedule:
-		if i.start_time > currTime.tm_hour and i.end_time < currTime.tm_hour:
+		if i.start_time >= currTime.tm_hour and i.end_time <= currTime.tm_hour:
 			working = True
 	
 	if currTime.tm_sec % 30 == 0:
+	if currTime.tm_min % changeDelay == 0:
 		if working:
 			path = os.path.join(workDir, random.choice(os.listdir(workDir)))
 		else:
-			path = os.path.join(playDir, random.choice(os.listdir(playDir)))
+			path = os.path.join(genericDir, random.choice(os.listdir(genericDir)))
 		
 		print(path, ctypes.windll.user32.SystemParametersInfoW(20, 0, path, 3))
 		time.sleep(1)
+		time.sleep(60)
 			
 
